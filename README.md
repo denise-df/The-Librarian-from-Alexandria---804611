@@ -79,11 +79,11 @@ We used Python 3.12.6 and a `venv` virtual environment to manage dependencies fo
 
 To recreate our environment and run the project:
 
-# Create and activate the virtual environment
+**Create and activate the virtual environment**
 python3 -m venv venv
 source venv/bin/activate          # On Windows: venv\Scripts\activate
 
-# Install required dependencies
+**Install required dependencies**
 pip install -r requirements.txt
 
 
