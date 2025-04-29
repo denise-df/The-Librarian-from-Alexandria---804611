@@ -23,6 +23,7 @@ The dataset consists of over 1,000 scanned pages of ancient texts, each labeled 
 ### 2.1 Data Integrity Check & Exploratory Data Analysis
 - **Existence Verification**  
   We added an `exist` column to our DataFrame that flags whether each image file is present on disk. Any entry with `exist == False` was dropped before further processing.
+  
 - **Font Label Mapping**  
   We extracted the unique font names from the dataset’s second column and created a dictionary to map each font to an integer label. In total, we identified **11 distinct fonts**, for example:
   ```python
