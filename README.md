@@ -36,6 +36,7 @@ The dataset consists of over 1,000 scanned pages of ancient texts, each labeled 
   }
 
 **Preprocessing Strategy**
+
 The scanned pages varied in resolution and clarity. To standardize inputs and reduce noise, we applied:
 - Grayscale conversion: reduced complexity from 3 channels to 1.
 - Resizing to 224x224: compatible with standard CNN input dimensions.
@@ -45,6 +46,7 @@ The scanned pages varied in resolution and clarity. To standardize inputs and re
 
 
 **Data Augmentation**
+
 To prevent overfitting and introduce visual variation (especially in a limited dataset), we implemented:
 - Random rotations (±15°) to simulate scanning misalignment.
 - Color jitter to mimic lighting conditions.
