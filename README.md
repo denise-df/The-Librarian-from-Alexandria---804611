@@ -120,17 +120,19 @@ Below is a high-level flowchart of our system:
 
 ## Section 3: Experimental Design
 
-We conducted two core experiments:
+We conducted two core experiments to evaluate and compare different model approaches:
 
-1. **Baseline CNN**  
-   - Purpose: Establish a basic benchmark.  
-   - Config: 3-layer CNN  
-   - Metrics: Accuracy, Macro F1
+1. **Baseline CNN (EnhancedFontCNN)**  
+   - Purpose: Establish a solid benchmark using a custom-built CNN.  
+   - Architecture: 4 convolutional layers with batch normalization, ReLU activations, max pooling, and dropout. The final classifier has two fully connected layers.
+   - Training: Trained from scratch using grayscale 224×224 images.
+   - Metrics: Accuracy, Macro F1-score, Confusion Matrix.
 
 2. **ResNet18 Fine-tuning**  
-   - Purpose: Use transfer learning to improve performance  
-   - Compared with baseline  
-   - Metrics: Accuracy, Confusion Matrix, Macro F1
+   - Purpose: Improve generalization using a pretrained model (transfer learning).
+   - Compared with baseline.
+   - Training: Only the final layer was trained on our dataset, making it faster and more robust to overfitting.
+   - Metrics: Accuracy, Macro F1-score, Confusion Matrix.
 
 ---
 
