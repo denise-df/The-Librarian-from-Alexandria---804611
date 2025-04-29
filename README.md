@@ -45,6 +45,7 @@ The scanned pages varied in resolution and clarity. To standardize inputs and re
 - Filtering: removed blank or unreadable post-binarized images.
 
 
+
 **Data Augmentation**
 
 To prevent overfitting and introduce visual variation (especially in a limited dataset), we implemented:
@@ -53,11 +54,14 @@ To prevent overfitting and introduce visual variation (especially in a limited d
 - Perspective transformations to replicate page distortion.
 
 
+
 **Model Selection**
+
 We experimented with two architectures:
 - Baseline CNN: a custom 3-layer convolutional model trained from scratch.
 - ResNet18: a pretrained convolutional neural network from the torchvision library, fine-tuned for our 11-class problem.
 The final choice of ResNet18 was based on its ability to extract deeper hierarchical features from images, speeding up convergence and improving generalization on our relatively small dataset.
+
 
 
 **Training Setup**
@@ -69,7 +73,23 @@ The final choice of ResNet18 was based on its ability to extract deeper hierarch
 - Data split: Stratified 80/20 for training and validation
 
 
+
 ### 2.2 Environment Reproducibility
 We used Python 3.12.6 and a `venv` virtual environment to manage dependencies for this project. All required libraries are listed in the `requirements.txt` file included in the repository.
 
 To recreate our environment and run the project:
+
+# Create and activate the virtual environment
+python3 -m venv venv
+source venv/bin/activate          # On Windows: venv\Scripts\activate
+
+# Install required dependencies
+pip install -r requirements.txt
+
+
+
+
+
+
+
+
