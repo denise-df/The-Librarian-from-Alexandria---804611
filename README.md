@@ -117,6 +117,41 @@ Below is a high-level flowchart of our system:
 
 ---
 
+## Section 3: Experimental Design
+
+We conducted two core experiments:
+
+1. **Baseline CNN**  
+   - Purpose: Establish a basic benchmark.  
+   - Config: 3-layer CNN  
+   - Metrics: Accuracy, Macro F1
+
+2. **ResNet18 Fine-tuning**  
+   - Purpose: Use transfer learning to improve performance  
+   - Compared with baseline  
+   - Metrics: Accuracy, Confusion Matrix, Macro F1
+
+---
+
+## Section 4: Results
+
+### Key Findings
+- Removing corrupt data improved training
+- Preprocessing and augmentation reduced overfitting
+- ResNet18 significantly outperformed the baseline
+
+### Results Table
+
+| Model        | Accuracy | Macro F1 | Training Time |
+|--------------|----------|----------|---------------|
+| Baseline CNN | 63.2%    | 0.61     | ~18 min       |
+| ResNet18     | 86.7%    | 0.84     | ~22 min       |
+
+### Confusion Matrix
+
+![Confusion Matrix](images/confusion_matrix.png)
+
+---
 
 
 
