@@ -7,7 +7,7 @@
 
 ---
 
-## 🧭 Section 1: Introduction
+## Section 1: Introduction
 
 This project was developed for the Machine Learning course at LUISS. As newly appointed librarians of the Great Library of Alexandria, our mission is to automatically classify ancient digitized texts by their font style, in order to support the digital archiving process. 
 
@@ -15,7 +15,7 @@ We built a deep learning model capable of identifying writing styles from histor
 
 ---
 
-## 🧪 Section 2: Methods
+## Section 2: Methods
 
 ### Dataset
 The dataset consists of over 1,000 scanned pages of ancient texts, each labeled with the font used. The files are stored in a CSV (`pages.csv`) referencing image files in the `img/` directory.
