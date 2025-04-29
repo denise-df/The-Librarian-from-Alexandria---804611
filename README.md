@@ -9,9 +9,9 @@
 
 ## Section 1: Introduction
 
-This project was developed for the Machine Learning course at LUISS. As newly appointed librarians of the Great Library of Alexandria, our mission is to automatically classify ancient digitized texts by their font style, in order to support the digital archiving process. 
+This project was developed as part of the Machine Learning course at LUISS. Acting as digital archivists of the Great Library of Alexandria, our task was to design a machine learning pipeline capable of classifying ancient digitized texts by the fonts used in their printing. These scanned pages come from various historical sources and use distinct typographic styles. 
 
-We built a deep learning model capable of identifying writing styles from historical scanned documents, dealing with challenges like image noise, font variation, and dataset imbalance. The final objective is to automate the annotation of historical documents based on their font.
+Our goal was to automate the identification of these font styles using a neural network-based image classification system. The final model should assist in organizing and archiving ancient documents by recognizing and categorizing fonts in a scalable, reliable way.
 
 ---
 
@@ -22,7 +22,7 @@ The dataset consists of over 1,000 scanned pages of ancient texts, each labeled 
 
 ### 2.1 Design Choices and Key Ideas
 - **Data Quality First**  
-  Our pipeline begins with a check for missing or unreadable images. We created a new `exist` column in the dataset to verify the presence of each file. This allowed us to safely drop corrupt samples, ensuring we trained only on valid data.
+  We started with a check for missing or unreadable images. A new `exist` column flagged whether each image file was present. Entries with missing images were dropped to avoid issues during training.
   
 - **Font Label Mapping**
   Since the dataset consists of font names (e.g., "cicero", "vesta") associated with each image, we mapped these strings to integer labels using a Python dictionary. We identified **11 unique fonts**, and assigned values from 0 to 10 for model compatibility, for example:
@@ -80,11 +80,14 @@ We used Python 3.12.6 and a `venv` virtual environment to manage dependencies fo
 To recreate our environment and run the project:
 
 **Create and activate the virtual environment**
+```bash
+# Create and activate the virtual environment
 python3 -m venv venv
-source venv/bin/activate          # On Windows: venv\Scripts\activate
+source venv/bin/activate
 
-**Install required dependencies**
+# Install required dependencies
 pip install -r requirements.txt
+```
 
 
 
