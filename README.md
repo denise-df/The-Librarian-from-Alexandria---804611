@@ -35,7 +35,8 @@ The dataset consists of over 1,000 scanned pages of ancient texts, each labeled 
       # ... up to 11 entries
   }
 
-**Preprocessing Strategy**
+
+**1. Preprocessing Strategy**
 
 The scanned pages varied in resolution and clarity. To standardize inputs and reduce noise, we applied:
 - Grayscale conversion: reduced complexity from 3 channels to 1.
@@ -46,7 +47,7 @@ The scanned pages varied in resolution and clarity. To standardize inputs and re
 
 
 
-**Data Augmentation**
+**2. Data Augmentation**
 
 To prevent overfitting and introduce visual variation (especially in a limited dataset), we implemented:
 - Random rotations (±15°) to simulate scanning misalignment.
@@ -55,7 +56,7 @@ To prevent overfitting and introduce visual variation (especially in a limited d
 
 
 
-**Model Selection**
+**3. Model Selection**
 
 We experimented with two architectures:
 - Baseline CNN: a custom 3-layer convolutional model trained from scratch.
@@ -64,7 +65,7 @@ The final choice of ResNet18 was based on its ability to extract deeper hierarch
 
 
 
-**Training Setup**
+**4. Training Setup**
 - Loss Function: CrossEntropyLoss
 - Optimizer: Adam (learning rate 1e-4, weight decay 1e-5)
 - Scheduler: ReduceLROnPlateau
