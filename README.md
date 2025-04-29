@@ -79,7 +79,6 @@ We used Python 3.12.6 and a `venv` virtual environment to manage dependencies fo
 
 To recreate our environment and run the project:
 
-**Create and activate the virtual environment**
 ```bash
 # Create and activate the virtual environment
 python3 -m venv venv
@@ -89,7 +88,34 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+To generate your own `requirements.txt`, use:
 
+```bash
+pip freeze > requirements.txt
+```
+
+### 2.3 Pipeline Overview
+Below is a high-level flowchart of our system:
+
+```
+[ Start ] 
+   ↓
+[ Check missing/corrupt images ]
+   ↓
+[ Font label mapping (string → int) ]
+   ↓
+[ Preprocessing: grayscale, resize, binarize, normalize ]
+   ↓
+[ Data augmentation ]
+   ↓
+[ Train model: CNN or ResNet18 ]
+   ↓
+[ Evaluate on validation set ]
+   ↓
+[ Save best model + confusion matrix + metrics ]
+```
+
+---
 
 
 
