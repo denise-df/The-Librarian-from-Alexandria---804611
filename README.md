@@ -229,7 +229,6 @@ This experiment served as a baseline, allowing us to establish reference metrics
 This experiment aimed to assess the impact of transfer learning on classification performance, especially on a relatively small and visually complex dataset like ours. The hypothesis was that pretrained features would improve generalization and accelerate training.
 
 *Architecture*: A ResNet18 model pretrained on ImageNet. We froze all layers except the final fully connected layer, which was replaced and retrained for 11 output classes. This allowed us to retain the rich hierarchical features learned from large-scale visual data while adapting the model to our specific font classification task.
-
 &nbsp;
 
 *Evaluation Metrics*:
