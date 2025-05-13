@@ -214,6 +214,8 @@ This experiment served as a baseline, allowing us to establish reference metrics
 
 *Architecture*: A custom CNN model with 4 convolutional layers followed by 2 fully connected layers. The architecture includes Batch Normalization, ReLU activations, MaxPooling, and Dropout to improve stability and reduce overfitting. The model was trained on augmented grayscale images resized to 224×224 pixels.
 
+&nbsp;
+
 *Evaluation Metrics*:
 - **Accuracy**: Measures the overall proportion of correct predictions across all font classes.
 - **Macro F1-Score**: Chosen to balance precision and recall across all classes, especially important given the class imbalance in our dataset.
@@ -228,11 +230,15 @@ This experiment aimed to assess the impact of transfer learning on classificatio
 
 *Architecture*: A ResNet18 model pretrained on ImageNet. We froze all layers except the final fully connected layer, which was replaced and retrained for 11 output classes. This allowed us to retain the rich hierarchical features learned from large-scale visual data while adapting the model to our specific font classification task.
 
+&nbsp;
+
 *Evaluation Metrics*:
 - **Accuracy**: For a consistent performance comparison with the baseline CNN.
 - **Macro F1-Score**: Ensured balanced evaluation across classes, highlighting improvements in handling less frequent font styles.
 - **Confusion Matrix**: Provided insights into class-specific performance and confusion patterns.
 
+
+&nbsp;
 
 Both experiments were executed under the same conditions:
 - Identical data splits and augmentation techniques
