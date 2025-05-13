@@ -15,6 +15,7 @@ Our goal was to automate the identification of these font styles using a neural 
 
 ---
 
+
 ## Section 2: Methods
 
 ### Dataset
@@ -68,6 +69,7 @@ In order to address the classification of ancient fonts, we explored and compare
 Custom CNN – Baseline Architecture:
 We first designed a simple yet effective Convolutional Neural Network to serve as a baseline. This model was trained from scratch and allowed us to test the full data pipeline—including preprocessing and augmentation—under controlled conditions.
 
+
 *Architecture details:*
 - **4 Convolutional Blocks**:
   - Each block includes:
@@ -87,12 +89,14 @@ This architecture was intentionally lightweight to ensure faster training, but i
 ResNet18 – Transfer Learning:
 To improve the performance, we used a pretrained ResNet18 model from the `torchvision.models` library. ResNet18 has been trained on millions of images from the ImageNet dataset and is known for its ability to learn deep and abstract features.
 
+
 *Adaptation for our task:*
 - All pretrained convolutional layers were frozen
 - Only the final fully connected layer was replaced and retrained
 - The classifier head was adjusted to output predictions across the 11 classes we had previosuly identified 
 
 This technique, known as *transfer learning*, is particularly effective when dealing with small or medium-sized datasets, like ours. ResNet18 was expected to extract more robust visual features and generalize better than the custom CNN.
+
 
 
 **4. Training Setup**
@@ -102,6 +106,7 @@ To ensure fair and reproducible training across both models, we adopted a consis
 - **Framework**: PyTorch 2.x
 - **Device**: CUDA-enabled GPU (if available), otherwise CPU
 
+
 *Optimization Strategy:*
 - Loss Function: `CrossEntropyLoss` (suitable for multi-class classification)
 - Optimizer: `Adam`
@@ -109,6 +114,7 @@ To ensure fair and reproducible training across both models, we adopted a consis
   - Weight decay: `1e-5` (to prevent overfitting)
 - Learning Rate Scheduler: `ReduceLROnPlateau`
   - Monitors validation loss and reduces the learning rate when the model stops improving
+
 
 *Training Conditions:*
 - Batch Size: 32
@@ -118,12 +124,14 @@ To ensure fair and reproducible training across both models, we adopted a consis
   - Fixed `SEED = 42` used across NumPy, PyTorch, and Python's `random` module
   - Enabled deterministic behavior on GPU for consistent results
 
+
 *Data Splitting:*
 - 80% of data used for training
 - 20% for validation
 - Stratified Split: Ensured the distribution of font classes remained balanced in both sets
 
 This setup provided a stable foundation for evaluating model performance under the same experimental conditions.
+
 
 
 ### 2.2 Environment Reproducibility
@@ -178,6 +186,8 @@ Below is a high-level flowchart of our system:
 
 ```
 
+
+
 ---
 
 ## Section 3: Experimental Design
@@ -195,7 +205,9 @@ This experiment served as a baseline, allowing us to establish reference metrics
 - **Macro F1-Score**: Chosen to balance precision and recall across all classes, especially important given the class imbalance in our dataset.
 - **Confusion Matrix**: Used for visualizing how well the model differentiates between specific font styles.
 
-3. **ResNet18 Fine-tuning**
+
+
+2. **ResNet18 Fine-tuning**
 This experiment aimed to assess the impact of transfer learning on classification performance, especially on a relatively small and visually complex dataset like ours. The hypothesis was that pretrained features would improve generalization and accelerate training.
 
 *Architecture*: A ResNet18 model pretrained on ImageNet. We froze all layers except the final fully connected layer, which was replaced and retrained for 11 output classes. This allowed us to retain the rich hierarchical features learned from large-scale visual data while adapting the model to our specific font classification task.
@@ -212,6 +224,8 @@ Both experiments were executed under the same conditions:
 - Fixed seed (`SEED = 42`) for reproducibility
 
 This experimental setup ensured a fair comparison, isolating the effect of the model architecture as the key variable.
+
+
 
 
 ---
