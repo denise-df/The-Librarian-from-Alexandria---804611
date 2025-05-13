@@ -21,9 +21,12 @@ Our goal was to automate the identification of these font styles using a neural 
 The dataset consists of over 1,000 scanned pages of ancient texts, each labeled with the font used. The files are stored in a CSV (`pages.csv`) referencing image files in the `img/` directory.
 
 ### 2.1 Design Choices and Key Ideas
-- **Data Quality First**  
-  We started with a check for missing or unreadable images. A new `exist` column flagged whether each image file was present. Entries with missing images were dropped to avoid issues during training.
-  
+- **Data Quality First**
+Before training we: 
+- Verified image existence by checking paths and filtering out missing or unreadable files.
+- Added a binary `exist` column which flagged whether each image file was present and entries with missing images were dropped to avoid issues during training.
+
+
 - **Font Label Mapping**
   Since the dataset consists of font names (e.g., "cicero", "vesta") associated with each image, we mapped these strings to integer labels using a Python dictionary. We identified **11 unique fonts**, and assigned values from 0 to 10 for model compatibility, for example:
   ```python
@@ -38,21 +41,23 @@ The dataset consists of over 1,000 scanned pages of ancient texts, each labeled 
 
 **1. Preprocessing Strategy**
 
-The scanned pages varied in resolution and clarity. To standardize inputs and reduce noise, we applied:
+The scanned pages varied in resolution and clarity, therefore, in order to standardize inputs and reduce noise, we applied:
 - Grayscale conversion: reduced complexity from 3 channels to 1.
-- Resizing to 224x224: compatible with standard CNN input dimensions.
-- Binarization with Otsu’s method: improved text/background separation.
-- Normalization: scaled pixel values to [0, 1].
-- Filtering: removed blank or unreadable post-binarized images.
+- Resizing to 224x224, which made the input compatible with standard CNN architectures.
+- Binarization with Otsu’s method: separated foreground text from noisy backgrounds.
+- Normalization, which scaled pixel values to [0, 1].
+- Filtering to remove visually blank or poorly segmented images.
 
 
 
 **2. Data Augmentation**
 
-To prevent overfitting and introduce visual variation (especially in a limited dataset), we implemented:
+To prevent overfitting and introduce visual variation, we implemented:
 - Random rotations (±15°) to simulate scanning misalignment.
 - Color jitter to mimic lighting conditions.
 - Perspective transformations to replicate page distortion.
+
+These augmentations were implemented using PyTorch’s `transforms.Compose`.
 
 
 
