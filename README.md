@@ -27,6 +27,7 @@ Before training we:
 - Verified image existence by checking paths and filtering out missing or unreadable files.
 - Added a binary `exist` column which flagged whether each image file was present and entries with missing images were dropped to avoid issues during training.
 
+&nbsp;
 
 - **Font Label Mapping**
   Since the dataset consists of font names (e.g., "cicero", "vesta") associated with each image, we mapped these strings to integer labels using a Python dictionary. We identified **11 unique fonts**, and assigned values from 0 to 10 for model compatibility, for example:
