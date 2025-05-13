@@ -207,6 +207,8 @@ Below is a high-level flowchart of our system:
 With the models defined and the training setup in place, we conducted two core experiments to measure and compare the effectiveness of each approach. These experiments were designed to answer a key research question:
 > How much improvement can be gained from transfer learning (ResNet18) over a simple CNN trained from scratch?
 
+&nbsp;
+
 1. **Baseline CNN (EnhancedFontCNN)**
 This experiment served as a baseline, allowing us to establish reference metrics for a standard convolutional architecture trained from scratch. It helped verify our data pipeline, preprocessing strategy, and label encoding.
 
@@ -217,6 +219,8 @@ This experiment served as a baseline, allowing us to establish reference metrics
 - **Macro F1-Score**: Chosen to balance precision and recall across all classes, especially important given the class imbalance in our dataset.
 - **Confusion Matrix**: Used for visualizing how well the model differentiates between specific font styles.
 
+
+&nbsp;
 
 
 2. **ResNet18 Fine-tuning**
