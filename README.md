@@ -22,7 +22,6 @@ Our goal was to automate the identification of these font styles using a neural 
 The dataset consists of over 1,000 scanned pages of ancient texts, each labeled with the font used. The files are stored in a CSV (`pages.csv`) referencing image files in the `img/` directory.
 
 ### 2.1 Design Choices and Key Ideas
-- **Data Quality First**
 Before training we: 
 - Verified image existence by checking paths and filtering out missing or unreadable files.
 - Added a binary `exist` column which flagged whether each image file was present and entries with missing images were dropped to avoid issues during training.
@@ -50,6 +49,7 @@ The scanned pages varied in resolution and clarity, therefore, in order to stand
 - Normalization, which scaled pixel values to [0, 1].
 - Filtering to remove visually blank or poorly segmented images.
 
+&nbsp;
 
 
 **2. Data Augmentation**
@@ -61,6 +61,7 @@ To prevent overfitting and introduce visual variation, we implemented:
 
 These augmentations were implemented using PyTorch’s `transforms.Compose`.
 
+&nbsp;
 
 
 **3. Model Selection**
@@ -86,6 +87,8 @@ We first designed a simple yet effective Convolutional Neural Network to serve a
 
 This architecture was intentionally lightweight to ensure faster training, but it served as a solid benchmark to measure the value added by more complex models.
 
+&nbsp;
+
 
 ResNet18 – Transfer Learning:
 To improve the performance, we used a pretrained ResNet18 model from the `torchvision.models` library. ResNet18 has been trained on millions of images from the ImageNet dataset and is known for its ability to learn deep and abstract features.
@@ -99,6 +102,8 @@ To improve the performance, we used a pretrained ResNet18 model from the `torchv
 This technique, known as *transfer learning*, is particularly effective when dealing with small or medium-sized datasets, like ours. ResNet18 was expected to extract more robust visual features and generalize better than the custom CNN.
 
 
+&nbsp;
+
 
 **4. Training Setup**
 To ensure fair and reproducible training across both models, we adopted a consistent training pipeline, carefully chosen based on best practices in deep learning.
@@ -107,6 +112,7 @@ To ensure fair and reproducible training across both models, we adopted a consis
 - **Framework**: PyTorch 2.x
 - **Device**: CUDA-enabled GPU (if available), otherwise CPU
 
+&nbsp;
 
 *Optimization Strategy:*
 - Loss Function: `CrossEntropyLoss` (suitable for multi-class classification)
@@ -116,6 +122,7 @@ To ensure fair and reproducible training across both models, we adopted a consis
 - Learning Rate Scheduler: `ReduceLROnPlateau`
   - Monitors validation loss and reduces the learning rate when the model stops improving
 
+&nbsp;
 
 *Training Conditions:*
 - Batch Size: 32
@@ -125,6 +132,7 @@ To ensure fair and reproducible training across both models, we adopted a consis
   - Fixed `SEED = 42` used across NumPy, PyTorch, and Python's `random` module
   - Enabled deterministic behavior on GPU for consistent results
 
+&nbsp;
 
 *Data Splitting:*
 - 80% of data used for training
@@ -133,6 +141,8 @@ To ensure fair and reproducible training across both models, we adopted a consis
 
 This setup provided a stable foundation for evaluating model performance under the same experimental conditions.
 
+
+&nbsp;
 
 
 ### 2.2 Environment Reproducibility
