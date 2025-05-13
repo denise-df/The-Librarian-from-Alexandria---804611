@@ -29,15 +29,19 @@ Before training we:
 &nbsp;
 
 - **Font Label Mapping**
-  Since the dataset consists of font names (e.g., "cicero", "vesta") associated with each image, we mapped these strings to integer labels using a Python dictionary. We identified **11 unique fonts**, and assigned values from 0 to 10 for model compatibility, for example:
+  Since the dataset consists of font names (e.g., "cicero", "vesta") associated with each image, we mapped these strings to integer labels using a Python dictionary. We identified **11 unique fonts**, and assigned values from 0 to 10 for model compatibility:
   ```python
-  font_to_label = {
-      'cicero': 0,
-      'vesta': 1,
-      'senatus': 2,
-      'trajan': 3,
-      # ... up to 11 entries
-  }
+  Font: augustus -> Label: 0
+  Font: aureus -> Label: 1
+  Font: cicero -> Label: 2
+  Font: colosseum -> Label: 3
+  Font: consul -> Label: 4
+  Font: forum -> Label: 5
+  Font: laurel -> Label: 6
+  Font: roman -> Label: 7
+  Font: senatus -> Label: 8
+  Font: trajan -> Label: 9
+  Font: vesta -> Label: 10
 
 
 **1. Preprocessing Strategy**
