@@ -1,8 +1,8 @@
 # The Librarian from Alexandria
 
 ## 👥 Team Members - AlexandriaAI
-- Denise Di Franza 
 - Gabriele De Ieso
+- Denise Di Franza 
 - Alessia Tonicello
 
 ---
