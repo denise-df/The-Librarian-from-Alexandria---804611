@@ -106,6 +106,7 @@ This technique, known as *transfer learning*, is particularly effective when dea
 
 
 **4. Training Setup**
+
 To ensure fair and reproducible training across both models, we adopted a consistent training pipeline, carefully chosen based on best practices in deep learning.
 
 *General Configuration:*
