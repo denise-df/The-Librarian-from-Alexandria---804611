@@ -152,19 +152,30 @@ Below is a high-level flowchart of our system:
 ```
 [ Start ] 
    ↓
-[ Check missing/corrupt images ]
+[ Load dataset and verify image paths ]
    ↓
-[ Font label mapping (string → int) ]
+[ Remove missing or corrupt images ]
    ↓
-[ Preprocessing: grayscale, resize, binarize, normalize ]
+[ Map font names to integer labels ]
    ↓
-[ Data augmentation ]
+[ Split dataset (stratified 80/20) → Train / Validation ]
    ↓
-[ Train model: CNN or ResNet18 ]
+[ Preprocessing: 
+   - Grayscale conversion
+   - Resize to 224x224
+   - Otsu binarization
+   - Normalization ]
    ↓
-[ Evaluate on validation set ]
+[ Data Augmentation (rotation, jitter, perspective) – train set only ]
    ↓
-[ Save best model + confusion matrix + metrics ]
+[ Select architecture: Custom CNN or pretrained ResNet18 ]
+   ↓
+[ Train model with early stopping and learning rate scheduler ]
+   ↓
+[ Evaluate on validation set using accuracy, macro F1, and confusion matrix ]
+   ↓
+[ Save best-performing model + export metrics and confusion matrix image ]
+
 ```
 
 ---
