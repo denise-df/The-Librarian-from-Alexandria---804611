@@ -76,7 +76,6 @@ To prevent overfitting and introduce visual variation, we implemented:
 
 
 **3. Model Selection**
-
 In order to address the classification of ancient fonts, we explored and compared two different neural network architectures: a custom-built Convolutional Neural Network (CNN) and two pretrained models: ResNet18 and MobileNetV2. With these architectures we progressively improved the performance.
 
 Custom CNN – Baseline Architecture:
@@ -211,28 +210,32 @@ Below is a high-level flowchart of our system:
 
 ## Section 3: Experimental Design
 
-With the models defined and the training setup in place, we conducted two core experiments to measure and compare the effectiveness of each approach. These experiments were designed to answer a key research question:
-> How much improvement can be gained from transfer learning (ResNet18) over a simple CNN trained from scratch?
+To validate our design choices and measure the performance impact of different model architectures, we conducted three structured experiments, which were designed to answer the central research question:
+> How much improvement can we achieve by transitioning from handcrafted CNNs to pretrained models, and how do data augmentation and fine-tuning strategies affect performance?
+
+Each experiment followed the same pipeline for preprocessing, stratified splitting, transformation, and training setup.
 
 &nbsp;
 
-1. **Baseline CNN (EnhancedFontCNN)**
-This experiment served as a baseline, allowing us to establish reference metrics for a standard convolutional architecture trained from scratch. It helped verify our data pipeline, preprocessing strategy, and label encoding.
+1. **Experiment 1 – Custom CNN and EnhancedFontCNN**
+Purpose: Establish a performance baseline and test how deepening the network affects model capability.
 
-*Architecture*: A custom CNN model with 4 convolutional layers followed by 2 fully connected layers. The architecture includes Batch Normalization, ReLU activations, MaxPooling, and Dropout to improve stability and reduce overfitting. The model was trained on augmented grayscale images resized to 224×224 pixels.
-
+Baseline(s):
+- Custom CNN: A compact architecture with four convolutional blocks followed by two fully connected layers. This model was used to validate the core pipeline and training process. It offered limited capacity and plateaued early during training.
+- EnhancedFontCNN: Built on the same structure, but with added depth, adaptive average pooling, and stronger dropout. This version was designed to improve feature learning, particularly in the presence of font variation and input noise.
+  
 &nbsp;
 
 *Evaluation Metrics*:
-- **Accuracy**: Measures the overall proportion of correct predictions across all font classes.
-- **Macro F1-Score**: Chosen to balance precision and recall across all classes, especially important given the class imbalance in our dataset.
-- **Confusion Matrix**: Used for visualizing how well the model differentiates between specific font styles.
+- Accuracy: Overall classification correctness
+- Macro F1-score: Chosen to handle class imbalance by averaging F1-scores across all fonts
+- Confusion Matrix: Used to understand which font classes were most often confused
 
 
 &nbsp;
 
 
-2. **ResNet18 Fine-tuning**
+2. **Experiment 2 – ResNet18 Transfer Learning**
 This experiment aimed to assess the impact of transfer learning on classification performance, especially on a relatively small and visually complex dataset like ours. The hypothesis was that pretrained features would improve generalization and accelerate training.
 
 *Architecture*: A ResNet18 model pretrained on ImageNet. We froze all layers except the final fully connected layer, which was replaced and retrained for 11 output classes. This allowed us to retain the rich hierarchical features learned from large-scale visual data while adapting the model to our specific font classification task.
