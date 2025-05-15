@@ -19,7 +19,7 @@ Our goal was to automate the identification of these font styles using a neural 
 ## Section 2: Methods
 
 ### Dataset
-The dataset consists of over 1,000 scanned pages of ancient texts, each labeled with the font used. The files are stored in a CSV (`pages.csv`) referencing image files in the `img/` directory.
+The dataset consists of 1,265 scanned pages of ancient texts, each labeled with the font used. The files are stored in a CSV (`pages.csv`) referencing image files in the `img/` directory.
 
 ### 2.1 Design Choices and Key Ideas
 Before training we: 
