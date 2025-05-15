@@ -324,24 +324,25 @@ Prediction Samples:
 ## Section 5: Conclusions 
 
 ### What We Learned
-- Transfer learning significantly boosts accuracy with limited data
-- Data quality and preprocessing directly affect performance
-- Lightweight models like MobileNetV2 are ideal for efficiency + accuracy
+Through this project, we observed that transfer learning greatly improves model performance when dealing with limited or noisy data. Models like ResNet18 and especially MobileNetV2 allowed us to leverage high-quality pretrained features, resulting in faster convergence and better accuracy compared to models trained from scratch.
+
+We also confirmed that data quality and robust preprocessing steps (such as contrast enhancement, patch extraction, and text normalization) have a significant impact on final results. Similarly, strategic data augmentation (flipping, affine transformations, perspective distortion) proved essential in helping the model generalize to new, unseen samples.
+
+Finally, we found that lightweight models like MobileNetV2 strike a great balance between computational efficiency and predictive power, making them an excellent choice in resource-constrained environments.
 
 &nbsp;
 
 ### Limitations
-- Dataset contains noise, variable layouts, and lighting inconsistencies
-- Some fonts remain underrepresented
-- Fine-tuning is limited by compute constraints
+Despite the encouraging results, our work faced several limitations. The dataset was highly heterogeneous, with many scanned pages affected by noise, inconsistent lighting, and varying layouts (e.g., single vs. double-page spreads). These issues sometimes led to difficult font distinctions.
+
+Additionally, some fonts were underrepresented in the dataset, which limited the model's ability to learn those classes effectively—even with class-weighted loss. Finally, hardware limitations prevented us from running more exhaustive hyperparameter tuning or fully unfreezing larger backbones.
 
 &nbsp;
 
 ### Future Work
-- Experiment with Vision Transformers and modern CNNs
-- Introduce denoising autoencoders or layout correction
-- Increase data size with synthetic font renderings
-- Use automated hyperparameter tuning
+Looking ahead, there are several directions that can be explored. First, experimenting with more advanced architectures—such as Transformers or modern CNN variants—could lead to further performance gains. Another promising choice is the integration of denoising autoencoders or layout normalization techniques, which could mitigate some of the visual inconsistencies found in the scans.
+
+We also plan to expand the dataset by generating synthetic examples for rare fonts or collecting more real scans. Lastly, we aim to apply automated hyperparameter optimization (e.g., with Bayesian search or Hyperband) to better tune our training settings and potentially unlock additional performance.
 
 
 
