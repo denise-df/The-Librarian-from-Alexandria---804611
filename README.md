@@ -144,12 +144,21 @@ This model helped validate our pipeline, but performance plateaued below 50% acc
 
 
 *EnhancedFontCNN*:
-This is a deeper version of the baseline CNN and this architecture increased the model capacity by:
-- Adding additional convolutional layers
-- Using adaptive average pooling to manage input variations
-- Increasing dropout regularization
+This was our first deep learning model explicitly tailored for font classification. Its architecture includes 4 convolutional layers, each followed by BatchNorm and ReLU, with MaxPooling layers to downsample feature maps and an adaptive average pooling layer to standardize feature outputs. The classifier head is composed of two dense layers with dropout and batch normalization, leading into an 11-class softmax output.
 
-The purpose of this model was to ensure correct image preprocessing, patch extraction, label encoding, and training loop functionality. However, performance plateaued early (~50% accuracy).
+The first version was trained with:
+- Fixed learning rate (1e-4)
+- Adam optimizer with weight decay (1e-4)
+- ReduceLROnPlateau for learning rate adaptation
+
+&nbsp;
+
+Later, we refined the training by:
+- Using CosineAnnealingLR in combination with ReduceLROnPlateau
+- Starting with a higher learning rate (1e-3)
+- Introducing early stopping with a 3-epoch patience
+
+In total, the final EnhancedFontCNN was trained for 12 epochs and achieved a best validation accuracy of 43.65%. The purpose of this model was to ensure correct image preprocessing, patch extraction, label encoding, and training loop functionality.
 
 
 &nbsp;
@@ -274,14 +283,24 @@ Each experiment followed the same pipeline for preprocessing, stratified splitti
 Purpose: Establish a performance baseline and test how deepening the network affects model capability.
 
 Baseline(s):
-- Custom CNN: A compact architecture with four convolutional blocks followed by two fully connected layers. This model was used to validate the core pipeline and training process. It offered limited capacity and plateaued early during training.
-- EnhancedFontCNN: Built on the same structure, but with added depth, adaptive average pooling, and stronger dropout. This version was designed to improve feature learning, particularly in the presence of font variation and input noise.
+Custom CNN:
+- Architecture: 4 convolutional blocks (Conv2D → BatchNorm → ReLU → MaxPool) followed by 2 fully connected layers
+- Used to validate the end-to-end training pipeline
+
+It achieved validation accuracy of approximately 45%
+
+EnhancedFontCNN:
+- Built on the Custom CNN but deeper and more regularized
+- Added adaptive average pooling and increased dropout
+- Initially used a fixed learning rate and ReduceLROnPlateau
+- Later included CosineAnnealingLR and early stopping
+
+It was trained for 12 epochs and reached a best validation accuracy of 43.65%
   
 &nbsp;
 
 *Evaluation Metrics*:
 - Accuracy: Overall classification correctness
-- Macro F1-score: Chosen to handle class imbalance by averaging F1-scores across all fonts
 - Confusion Matrix: Used to understand which font classes were most often confused
 
 
