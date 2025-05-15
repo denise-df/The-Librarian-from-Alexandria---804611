@@ -44,7 +44,7 @@ Before training we:
   Font: vesta -> Label: 10
 
 
-**1. Preprocessing Strategy**
+**2.1.1. Preprocessing Strategy**
 
 The scanned pages varied in resolution and clarity, therefore, in order to standardize inputs and reduce noise, ee tested and compared multiple preprocessing pipelines. Our final steps included::
 - Grayscale conversion: convert images to grayscale to reduce complexity (from 3 channels to 1), because color isn't needed for font recognition.
@@ -68,7 +68,7 @@ The scanned pages varied in resolution and clarity, therefore, in order to stand
 &nbsp;
 
 
-**2.3 Data Augmentation (Training Set Only)**
+**2.1.2 Data Augmentation (Training Set Only)**
 To prevent overfitting and introduce visual variation, we implemented:
 - Random Horizontal Flip (50%)
 - Random Affine Transformations (rotation ±10°, translation ±10%, scaling ±10%)
@@ -78,7 +78,7 @@ To prevent overfitting and introduce visual variation, we implemented:
 
 &nbsp;
 
-**2.4 Tensor Conversion & Normalization**
+**2.1.3 Tensor Conversion & Normalization**
 - ToTensor: converts PIL images to PyTorch tensors
 - Normalization: scales pixel values to [-1, 1] using mean=0.5, std=0.5
 - Validation set is only resized, normalized and converted to tensor (no augmentation).
@@ -86,7 +86,7 @@ To prevent overfitting and introduce visual variation, we implemented:
 
 &nbsp;
 
-**2.5 Dataset Splitting Strategy**
+**2.1.4 Dataset Splitting Strategy**
 &nbsp;
 Once the images were preprocessed and transformed, we proceeded with the final step of dataset preparation: splitting the data into training and validation subsets. Given the presence of class imbalance — with some fonts being significantly less represented — it was crucial to adopt a strategy that would preserve the original class distribution across both subsets. 
 To achieve this, we used StratifiedShuffleSplit from the scikit-learn library, performing a single split in which 80% of the data was allocated to training and 20% to validation. By fixing the random seed, we ensured full reproducibility of the experiment. This stratified approach guaranteed that each font class maintained roughly the same proportion in both the training and validation sets.
@@ -136,6 +136,10 @@ Our starting point was a simple Convolutional Neural Network composed of:
 
 This model helped validate our pipeline, but performance plateaued below 50% accuracy.
 
+
+&nbsp;
+
+
 *EnhancedFontCNN*:
 This is a deeper version of the baseline CNN and this architecture increased the model capacity by:
 - Adding additional convolutional layers
@@ -153,6 +157,8 @@ It introduced deeper residual blocks and skip connections, which allow for bette
 - All feature extraction layers were frozen
 - The final fully connected layer was replaced to output 11 classes
 This model generalized better than CNNs but was constrained by frozen weights. It reached ~58% accuracy before training was stopped early due to runtime limits.
+
+&nbsp;
 
 MobileNetV2 (Final Model):
 MobileNetV2 was chosen for its efficiency its lightweight and provided the best performance.
