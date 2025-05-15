@@ -341,15 +341,16 @@ Shared Setup Across All Experiments:
 
 ### Results Table
 
-| Model                 | Accuracy  | Macro F1  | Notes                                                                                  |
-|----------------------|-----------|-----------|----------------------------------------------------------------------------------------|
-| Custom CNN           | ~50%      | ~0.48     | Baseline architecture with 4 convolutional blocks and 2 dense layers.                 |
-| EnhancedFontCNN      | ~50%      | ~0.48     | Deeper custom CNN with more layers and dropout, but limited improvement.              |
-| ResNet18 (Frozen)    | Not available | Not available | Training aborted early due to excessive runtime. No valid performance metrics.         |
-| MobileNetV2 (Frozen) | ~58%      | —         | Pretrained model used with frozen backbone; reached baseline performance.             |
-| MobileNetV2 (No Aug) | ~71.43%   | —         | Partial fine-tuning without data augmentation; strong but slightly less robust.        |
-| MobileNetV2 (Agg. Aug) | ~62%    | —         | Aggressive data augmentation applied; performance degraded due to visual distortion.   |
-| MobileNetV2 (Final, Partial Fine-Tuning) | **~73.4%** | **~0.70** | Best configuration: partial fine-tuning + moderate augmentation + dropout(0.4).       |
+| Model Configuration                     | Accuracy  | Notes                                                                                  |
+|----------------------------------------|-----------|----------------------------------------------------------------------------------------|
+| Custom CNN                             | ~50%      | Baseline model with 4 convolutional blocks and 2 dense layers.                        |
+| EnhancedFontCNN                        | ~50%      | Deeper CNN with more layers and dropout; showed no significant improvement.           |
+| ResNet18 (Frozen Backbone)             | —         | Training was aborted early due to excessive runtime; no meaningful results obtained.  |
+| MobileNetV2 (Frozen Backbone)          | ~58%      | Pretrained MobileNetV2 used without fine-tuning; matched baseline performance.        |
+| MobileNetV2 (No Data Augmentation)     | ~71.43%   | Partial fine-tuning without any data augmentation; strong but slightly less robust.   |
+| MobileNetV2 (Aggressive Augmentation)  | ~62%      | Used heavy augmentation; performance decreased due to excessive visual distortion.    |
+| MobileNetV2 (Final Model)              | **~73.4%**| Best setup: partial fine-tuning, moderate augmentation, dropout(0.4).                |
+
 
 
 
