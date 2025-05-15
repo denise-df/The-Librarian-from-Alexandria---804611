@@ -339,6 +339,8 @@ Shared Setup Across All Experiments:
 - Data augmentation proved crucial for generalization
 - Class-weighted loss improved performance on underrepresented fonts
 
+The table below provides a high-level summary of the models tested during the experimentation phase. It shows how the combination of transfer learning, fine-tuning, and careful augmentation led to significant performance improvements.
+
 ### Results Table
 
 | Model Configuration                     | Accuracy  | Notes                                                                                  |
@@ -357,7 +359,6 @@ Shared Setup Across All Experiments:
 ### Confusion Matrices
 
 Included in /images/:
-- confusion_matrix_resnet.png
 - confusion_matrix_mobilenet.png
 - ![Confusion Matrix – MobileNetV2](images/confusion_matrix_mobilenet.png)
 
