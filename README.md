@@ -236,9 +236,13 @@ Baseline(s):
 
 
 2. **Experiment 2 – ResNet18 Transfer Learning**
-This experiment aimed to assess the impact of transfer learning on classification performance, especially on a relatively small and visually complex dataset like ours. The hypothesis was that pretrained features would improve generalization and accelerate training.
+Purpose: Evaluate the benefit of using a pretrained deep convolutional network on a small dataset.
 
-*Architecture*: A ResNet18 model pretrained on ImageNet. We froze all layers except the final fully connected layer, which was replaced and retrained for 11 output classes. This allowed us to retain the rich hierarchical features learned from large-scale visual data while adapting the model to our specific font classification task.
+- ResNet18 from `torchvision.models`, pretrained on ImageNet
+- All layers frozen except the final classifier head adapted to 11 font classes
+
+This setup allowed the model to use high-quality pretrained features. While it generalized better than CNNs, accuracy was still modest, suggesting that frozen weights may limit adaptation to domain-specific features like font textures.
+
 &nbsp;
 
 *Evaluation Metrics*:
@@ -249,14 +253,30 @@ This experiment aimed to assess the impact of transfer learning on classificatio
 
 &nbsp;
 
-Both experiments were executed under the same conditions:
-- Identical data splits and augmentation techniques
-- Same loss function (`CrossEntropyLoss`), optimizer (`Adam`), and scheduler (`ReduceLROnPlateau`)
-- Fixed seed (`SEED = 42`) for reproducibility
 
-This experimental setup ensured a fair comparison, isolating the effect of the model architecture as the key variable.
+3. **Experiment 2 – MobileNetV2 (Partial Fine-Tuning)**
+Purpose: Test whether a lightweight architecture with selective fine-tuning and strong data augmentation could outperform deeper models.
 
+- MobileNetV2 from `torchvision.models`
+- Trained in multiple configurations:
+  - Frozen backbone + new head
+  - Partially unfrozen layers + head
+  - With and without aggressive data augmentation
 
+This model achieved the best performance (up to ~73% accuracy), confirming that selective fine-tuning and data augmentation can compensate for compute limitations and dataset size. Its efficiency also made it suitable for deployment in lower-resource environments.
+
+&nbsp;
+
+*Evaluation Metrics*: Same as above
+
+&nbsp;
+
+Shared Setup Across All Experiments:
+- Identical preprocessing and text patch extraction
+- Same augmentation strategies (applied only to training set)
+- Consistent use of Weighted CrossEntropyLoss, Adam optimizer, and learning rate schedulers
+- Stratified 80/20 splits with fixed random seed
+- Early stopping based on validation loss stagnation
 
 
 ---
@@ -264,22 +284,64 @@ This experimental setup ensured a fair comparison, isolating the effect of the m
 ## Section 4: Results
 
 ### Key Findings
-- Removing corrupt data improved training
-- Preprocessing and augmentation reduced overfitting
-- ResNet18 significantly outperformed the baseline
+- MobileNetV2 outperformed all other models
+- Data augmentation proved crucial for generalization
+- Class-weighted loss improved performance on underrepresented fonts
 
 ### Results Table
 
-| Model        | Accuracy | Macro F1 | Training Time |
-|--------------|----------|----------|---------------|
-| Baseline CNN | 63.2%    | 0.61     | ~18 min       |
-| ResNet18     | 86.7%    | 0.84     | ~22 min       |
+| Model             | Accuracy | Macro F1 | Training Time |
+|------------------|----------|----------|---------------|
+| EnhancedFontCNN  | ~50%     | ~0.48    | ~15 min       |
+| ResNet18 (TL)    | ~58%     | ~0.55    | ~18 min       |
+| MobileNetV2 (FT) | ~73%     | ~0.70    | ~25 min       |
 
-### Confusion Matrix
 
-![Confusion Matrix](images/confusion_matrix.png)
+### Confusion Matrices
+
+Included in /images/:
+- confusion_matrix_resnet.png
+- confusion_matrix_mobilenet.png
+
+&nbsp;
+
+Insights:
+- Strong diagonals in most classes
+- Frequent misclassifications:
+    - augustus ↔ cicero
+    - colosseum ↔ trajan, roman ↔ senatus
+
+
+&nbsp;
+
+Prediction Samples:
+- See: images/prediction_examples.png
+- Highlights both correct and incorrect predictions
+
 
 ---
+
+## Section 5: Conclusions 
+
+### What We Learned
+- Transfer learning significantly boosts accuracy with limited data
+- Data quality and preprocessing directly affect performance
+- Lightweight models like MobileNetV2 are ideal for efficiency + accuracy
+
+&nbsp;
+
+### Limitations
+- Dataset contains noise, variable layouts, and lighting inconsistencies
+- Some fonts remain underrepresented
+- Fine-tuning is limited by compute constraints
+
+&nbsp;
+
+### Future Work
+- Experiment with Vision Transformers and modern CNNs
+- Introduce denoising autoencoders or layout correction
+- Increase data size with synthetic font renderings
+- Use automated hyperparameter tuning
 
 
 
