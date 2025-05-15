@@ -161,6 +161,9 @@ Later, we refined the training by:
 In total, the final EnhancedFontCNN was trained for 12 epochs and achieved a best validation accuracy of 43.65%. The purpose of this model was to ensure correct image preprocessing, patch extraction, label encoding, and training loop functionality.
 
 
+
+&nbsp;
+**Pretrained Models**
 &nbsp;
 To improve the performance, we used pretrained ResNet18 and MobileNetV2 models, both imported from the `torchvision.models` library, which provides pretrained versions of these architectures based on the ImageNet dataset.
 &nbsp;
