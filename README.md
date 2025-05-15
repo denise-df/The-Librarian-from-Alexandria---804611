@@ -46,64 +46,76 @@ Before training we:
 
 **1. Preprocessing Strategy**
 
-The scanned pages varied in resolution and clarity, therefore, in order to standardize inputs and reduce noise, we applied:
-- Grayscale conversion: reduced complexity from 3 channels to 1.
-- Resizing to 224x224, which made the input compatible with standard CNN architectures.
-- Binarization with Otsu’s method: separated foreground text from noisy backgrounds.
-- Normalization, which scaled pixel values to [0, 1].
-- Filtering to remove visually blank or poorly segmented images.
+The scanned pages varied in resolution and clarity, therefore, in order to standardize inputs and reduce noise, ee tested and compared multiple preprocessing pipelines. Our final steps included::
+- Grayscale conversion: convert images to grayscale to reduce complexity (from 3 channels to 1), because color isn't needed for font recognition.
+- CLAHE (Contrast Enhancement): to improve local contrast in noisy or unevenly lit scans
+- Double-page splitting: if an image is too wide (double-page spread), we split it into two pages based on aspect ratio.
+- Text patch extraction: using adaptive thresholding and a sliding window to extract 255x255 patches containing text
+- Fallback center crop: used when no valid patches were found
 
 &nbsp;
 
 
-**2. Data Augmentation**
-
+**2.3 Data Augmentation (Training Set Only)**
 To prevent overfitting and introduce visual variation, we implemented:
-- Random rotations (±15°) to simulate scanning misalignment.
-- Color jitter to mimic lighting conditions.
-- Perspective transformations to replicate page distortion.
+- Random Horizontal Flip (50%)
+- Random Affine Transformations (rotation ±10°, translation ±10%, scaling ±10%)
+- Random Perspective Distortion (scale = 0.2)
+- (Optional) Random Erasing – currently disabled
 
-These augmentations were implemented using PyTorch’s `transforms.Compose`.
+
+&nbsp;
+
+**2.4 Tensor Conversion & Normalization**
+- ToTensor: converts PIL images to PyTorch tensors
+- Normalization: scales pixel values to [-1, 1] using mean=0.5, std=0.5
+- Validation set is only resized, normalized and converted to tensor (no augmentation).
+
 
 &nbsp;
 
 
 **3. Model Selection**
 
-In order to address the classification of ancient fonts, we explored and compared two different neural network architectures: a custom-built Convolutional Neural Network (CNN) and a pretrained ResNet18 model. Each approach was chosen for its specific strengths and evaluated as part of our experimental design.
+In order to address the classification of ancient fonts, we explored and compared two different neural network architectures: a custom-built Convolutional Neural Network (CNN) and two pretrained models: ResNet18 and MobileNetV2. With these architectures we progressively improved the performance.
 
 Custom CNN – Baseline Architecture:
 We first designed a simple yet effective Convolutional Neural Network to serve as a baseline. This model was trained from scratch and allowed us to test the full data pipeline—including preprocessing and augmentation—under controlled conditions.
 
+*Custom CNN (Baseline)*:
+Our starting point was a simple Convolutional Neural Network composed of:
+- 4 convolutional blocks, each with Batch Normalization, ReLU activation, MaxPooling, and Dropout
+- 2 fully connected layers followed by a Softmax classifier for 11 font classes
 
-*Architecture details:*
-- **4 Convolutional Blocks**:
-  - Each block includes:
-    - 2D Convolution layer
-    - Batch Normalization
-    - ReLU activation
-    - Max Pooling
-    - Dropout (to reduce overfitting)
-- **2 Fully Connected Layers**:
-  - Flattened features are passed through linear layers
-  - Final output layer with 11 nodes (one per font class)
-  - Softmax activation applied for multi-class classification
+This model helped validate our pipeline, but performance plateaued below 50% accuracy.
 
-This architecture was intentionally lightweight to ensure faster training, but it served as a solid benchmark to measure the value added by more complex models.
+*EnhancedFontCNN*:
+This is a deeper version of the baseline CNN and this architecture increased the model capacity by:
+- Adding additional convolutional layers
+- Using adaptive average pooling to manage input variations
+- Increasing dropout regularization
+
+However, despite the improvements, accuracy still remained moderate.
+
 
 &nbsp;
+To improve the performance, we used pretrained ResNet18 and MobileNetV2 models, both imported from the `torchvision.models` library, which provides pretrained versions of these architectures based on the ImageNet dataset.
+&nbsp;
+ResNet18 (Transfer Learning):
+We fine-tuned a ResNet18 model pretrained on ImageNet:
+- All feature extraction layers were frozen
+- The final fully connected layer was replaced to output 11 classes
+This approach improved performance and required less training time, but results stabilized around ~58% accuracy.
 
+MobileNetV2 (Final Model):
+- This lightweight and efficient model provided the best performance:
+- Initially trained with a frozen backbone
+- Later runs unfreezed the last few layers for partial fine-tuning
+- Combined with data augmentation and weighted loss
+Results peaked at ~73% accuracy, showing strong generalization and faster convergence, even on limited hardware.
 
-ResNet18 – Transfer Learning:
-To improve the performance, we used a pretrained ResNet18 model from the `torchvision.models` library. ResNet18 has been trained on millions of images from the ImageNet dataset and is known for its ability to learn deep and abstract features.
-
-
-*Adaptation for our task:*
-- All pretrained convolutional layers were frozen
-- Only the final fully connected layer was replaced and retrained
-- The classifier head was adjusted to output predictions across the 11 classes we had previosuly identified 
-
-This technique, known as *transfer learning*, is particularly effective when dealing with small or medium-sized datasets, like ours. ResNet18 was expected to extract more robust visual features and generalize better than the custom CNN.
+&nbsp;
+This technique, known as *transfer learning*, is particularly effective when dealing with small or medium-sized datasets, like ours. ResNet18 and MobileNetV2 were expected to extract more robust visual features and generalize better than the custom CNN.
 
 
 &nbsp;
@@ -114,37 +126,35 @@ This technique, known as *transfer learning*, is particularly effective when dea
 To ensure fair and reproducible training across both models, we adopted a consistent training pipeline, carefully chosen based on best practices in deep learning.
 
 *General Configuration:*
-- **Framework**: PyTorch 2.x
-- **Device**: CUDA-enabled GPU (if available), otherwise CPU
+- Framework: PyTorch 2.x
+- Device: CUDA-enabled GPU (if available), otherwise CPU
+- Seed: A fixed random seed (42) was applied across NumPy, PyTorch, and Python to guarantee reproducible results
 
 &nbsp;
 
 *Optimization Strategy:*
-- Loss Function: `CrossEntropyLoss` (suitable for multi-class classification)
+- Loss Function: `CrossEntropyLoss` weighted by inverse class frequencies to address dataset imbalance
 - Optimizer: `Adam`
   - Learning rate: `1e-4`
   - Weight decay: `1e-5` (to prevent overfitting)
-- Learning Rate Scheduler: `ReduceLROnPlateau`
-  - Monitors validation loss and reduces the learning rate when the model stops improving
+- Learning Rate Scheduler:
+  - `CosineAnnealingLR` for smooth cyclical updates
+  - `ReduceLROnPlateau` for reducing learning rate on validation plateaus
 
 &nbsp;
 
 *Training Conditions:*
-- Batch Size: 32
-- Early Stopping: Applied based on validation loss stagnation
-- Epochs: Up to 100, but typically stopped early
-- Reproducibility:
-  - Fixed `SEED = 42` used across NumPy, PyTorch, and Python's `random` module
-  - Enabled deterministic behavior on GPU for consistent results
+
+- Batch Size: 16 (due to limited GPU memory)
+- Epochs: Up to 100, with early stopping triggered by validation loss stagnation
+- Precision: Mixed precision training using autocast and GradScaler to accelerate training and reduce memory usage
 
 &nbsp;
 
 *Data Splitting:*
 - 80% of data used for training
 - 20% for validation
-- Stratified Split: Ensured the distribution of font classes remained balanced in both sets
-
-This setup provided a stable foundation for evaluating model performance under the same experimental conditions.
+- Stratified Shuffle Split: Ensured the distribution of font classes remained balanced in both sets to avoid bias or poor generalization for underrepresented fonts
 
 
 &nbsp;
@@ -174,32 +184,25 @@ pip freeze > requirements.txt
 Below is a high-level flowchart of our system:
 
 ```
-[ Start ] 
+[ Start ]
    ↓
-[ Load dataset and verify image paths ]
-   ↓
-[ Remove missing or corrupt images ]
+[ Verify dataset + remove corrupt files ]
    ↓
 [ Map font names to integer labels ]
    ↓
-[ Split dataset (stratified 80/20) → Train / Validation ]
+[ Split dataset (stratified 80/20) ]
    ↓
-[ Preprocessing: 
-   - Grayscale conversion
-   - Resize to 224x224
-   - Otsu binarization
-   - Normalization ]
+[ Preprocessing (CLAHE, patch extraction, grayscale) ]
    ↓
-[ Data Augmentation (rotation, jitter, perspective) – train set only ]
+[ Data Augmentation (train set only) ]
    ↓
-[ Select architecture: Custom CNN or pretrained ResNet18 ]
+[ Apply transforms + create datasets ]
    ↓
-[ Train model with early stopping and learning rate scheduler ]
+[ Train CNN / ResNet / MobileNetV2 ]
    ↓
-[ Evaluate on validation set using accuracy, macro F1, and confusion matrix ]
+[ Evaluate on validation set (metrics + confusion matrix) ]
    ↓
-[ Save best-performing model + export metrics and confusion matrix image ]
-
+[ Save best model and predictions ]
 ```
 
 
