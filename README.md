@@ -302,6 +302,7 @@ Shared Setup Across All Experiments:
 Included in /images/:
 - confusion_matrix_resnet.png
 - confusion_matrix_mobilenet.png
+- ![Confusion Matrix – MobileNetV2](images/confusion_matrix_mobilenet.png)
 
 &nbsp;
 
