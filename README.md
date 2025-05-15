@@ -164,6 +164,7 @@ In total, the final EnhancedFontCNN was trained for 12 epochs and achieved a bes
 
 &nbsp;
 **Pretrained Models**
+
 &nbsp;
 To improve the performance, we used pretrained ResNet18 and MobileNetV2 models, both imported from the `torchvision.models` library, which provides pretrained versions of these architectures based on the ImageNet dataset.
 &nbsp;
