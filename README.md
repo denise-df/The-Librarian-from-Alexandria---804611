@@ -294,14 +294,11 @@ Purpose: Evaluate the benefit of using a pretrained deep convolutional network o
 - ResNet18 from `torchvision.models`, pretrained on ImageNet
 - All layers frozen except the final classifier head adapted to 11 font classes
 
-This setup allowed the model to use high-quality pretrained features. While it generalized better than CNNs, accuracy was still modest, suggesting that frozen weights may limit adaptation to domain-specific features like font textures.
+However, training had to be aborted early due to excessive runtime, and the model did not complete a full training cycle (5-epoch run interrupted). Thereofre, its heavy architecture and long training time made it unsuitable for our available hardware and we don't have results.
 
 &nbsp;
 
-*Evaluation Metrics*:
-- **Accuracy**: For a consistent performance comparison with the baseline CNN.
-- **Macro F1-Score**: Ensured balanced evaluation across classes, highlighting improvements in handling less frequent font styles.
-- **Confusion Matrix**: Provided insights into class-specific performance and confusion patterns.
+*Evaluation Metrics*: Same as above.
 
 
 &nbsp;
@@ -310,13 +307,14 @@ This setup allowed the model to use high-quality pretrained features. While it g
 3. **Experiment 3 – MobileNetV2 (Partial Fine-Tuning)**
 Purpose: Test whether a lightweight architecture with selective fine-tuning and strong data augmentation could outperform deeper models.
 
-- MobileNetV2 from `torchvision.models`
-- Trained in multiple configurations:
-  - Frozen backbone + new head
-  - Partially unfrozen layers + head
-  - With and without aggressive data augmentation
+MobileNetV2 from `torchvision.models` was trained in multiple configurations:
+- CPU-only (5 epochs): ~58% acc
+- Partial fine-tuning (14 epochs): ~73.4% acc, ~0.70 F1
+- No augmentation (10 epochs): ~71.43% acc
+- Aggressive augmentation (7 epochs): peaked at ~63% acc
 
-This model achieved the best performance (up to ~73% accuracy), confirming that selective fine-tuning and data augmentation can compensate for compute limitations and dataset size. Its efficiency also made it suitable for deployment in lower-resource environments.
+
+The best configuration proved to be partial fine-tuning with dropout(0.4) + moderate augmentation. This model achieved the best performance (up to ~73% accuracy), confirming that selective fine-tuning and data augmentation can compensate for compute limitations and dataset size. Its efficiency also made it suitable for deployment in lower-resource environments.
 
 &nbsp;
 
@@ -343,11 +341,16 @@ Shared Setup Across All Experiments:
 
 ### Results Table
 
-| Model             | Accuracy | Macro F1 | Training Time |
-|------------------|----------|----------|---------------|
-| EnhancedFontCNN  | ~50%     | ~0.48    | ~15 min       |
-| ResNet18 (TL)    | ~58%     | ~0.55    | ~18 min       |
-| MobileNetV2 (FT) | ~73%     | ~0.70    | ~25 min       |
+| Model                 | Accuracy  | Macro F1  | Notes                                                                                  |
+|----------------------|-----------|-----------|----------------------------------------------------------------------------------------|
+| Custom CNN           | ~50%      | ~0.48     | Baseline architecture with 4 convolutional blocks and 2 dense layers.                 |
+| EnhancedFontCNN      | ~50%      | ~0.48     | Deeper custom CNN with more layers and dropout, but limited improvement.              |
+| ResNet18 (Frozen)    | Not available | Not available | Training aborted early due to excessive runtime. No valid performance metrics.         |
+| MobileNetV2 (Frozen) | ~58%      | —         | Pretrained model used with frozen backbone; reached baseline performance.             |
+| MobileNetV2 (No Aug) | ~71.43%   | —         | Partial fine-tuning without data augmentation; strong but slightly less robust.        |
+| MobileNetV2 (Agg. Aug) | ~62%    | —         | Aggressive data augmentation applied; performance degraded due to visual distortion.   |
+| MobileNetV2 (Final, Partial Fine-Tuning) | **~73.4%** | **~0.70** | Best configuration: partial fine-tuning + moderate augmentation + dropout(0.4).       |
+
 
 
 ### Confusion Matrices
