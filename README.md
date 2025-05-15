@@ -86,8 +86,45 @@ To prevent overfitting and introduce visual variation, we implemented:
 
 &nbsp;
 
+**2.5 Dataset Splitting Strategy**
+Once the images were preprocessed and transformed, we proceeded with the final step of dataset preparation: splitting the data into training and validation subsets. Given the presence of class imbalance — with some fonts being significantly less represented — it was crucial to adopt a strategy that would preserve the original class distribution across both subsets. 
+To achieve this, we used StratifiedShuffleSplit from the scikit-learn library, performing a single split in which 80% of the data was allocated to training and 20% to validation. By fixing the random seed, we ensured full reproducibility of the experiment. This stratified approach guaranteed that each font class maintained roughly the same proportion in both the training and validation sets.
+
+After splitting, we applied the appropriate transformation pipeline to each subset:
+- The **training set** received the full augmentation pipeline (random flips, affine transforms, etc.)
+- The **validation set** was only normalized and resized, without augmentations, to reflect real-world inference conditions
+
+To visually inspect the quality and correctness of our splitting and transformation procedures, we generated three visual previews:
+
+1. A full dataset sample, showing randomly selected examples prior to any transformation:
+
+&nbsp;
+&nbsp;
+![Full - Dataset](images/Datset_examples_complete.png)
+
+&nbsp;
+&nbsp;
+
+2. A training set preview, displaying patches after augmentation, to verify the effectiveness and variability introduced by our transformations;
+![Training - Post](images/training_set.png)
+
+&nbsp;
+&nbsp;
+
+3. A test set preview, confirming that only minimal, clean preprocessing was applied.
+![Test - Post](images/test_set.png)
+
+
+
+
+
+
+&nbsp;
+
 
 **3. Model Selection**
+
+
 &nbsp;
 In order to address the classification of ancient fonts, we explored and compared different neural network architectures: a custom-built Convolutional Neural Network (CNN) and two pretrained models: ResNet18 and MobileNetV2. With these architectures we progressively improved the performance.
 
