@@ -371,13 +371,6 @@ Insights:
     - colosseum ↔ trajan, roman ↔ senatus
 
 
-&nbsp;
-
-Prediction Samples:
-- See: images/prediction_examples.png
-- Highlights both correct and incorrect predictions
-
-
 ---
 
 ## Section 5: Conclusions 
