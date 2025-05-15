@@ -87,6 +87,7 @@ To prevent overfitting and introduce visual variation, we implemented:
 &nbsp;
 
 **2.5 Dataset Splitting Strategy**
+&nbsp;
 Once the images were preprocessed and transformed, we proceeded with the final step of dataset preparation: splitting the data into training and validation subsets. Given the presence of class imbalance — with some fonts being significantly less represented — it was crucial to adopt a strategy that would preserve the original class distribution across both subsets. 
 To achieve this, we used StratifiedShuffleSplit from the scikit-learn library, performing a single split in which 80% of the data was allocated to training and 20% to validation. By fixing the random seed, we ensured full reproducibility of the experiment. This stratified approach guaranteed that each font class maintained roughly the same proportion in both the training and validation sets.
 
@@ -113,9 +114,6 @@ To visually inspect the quality and correctness of our splitting and transformat
 
 3. A test set preview, confirming that only minimal, clean preprocessing was applied.
 ![Test - Post](images/test_set.png)
-
-
-
 
 
 
@@ -200,13 +198,6 @@ To ensure fair and reproducible training across both models, we adopted a consis
 - Batch Size: 16 (due to limited GPU memory)
 - Epochs: Up to 100, with early stopping triggered by validation loss stagnation
 - Precision: Mixed precision training using autocast and GradScaler to accelerate training and reduce memory usage
-
-&nbsp;
-
-*Data Splitting:*
-- 80% of data used for training
-- 20% for validation
-- Stratified Shuffle Split: Ensured the distribution of font classes remained balanced in both sets to avoid bias or poor generalization for underrepresented fonts
 
 
 &nbsp;
