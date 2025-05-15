@@ -60,11 +60,7 @@ The scanned pages varied in resolution and clarity, therefore, in order to stand
 
 &nbsp;
 &nbsp;
-![Text Patch - Example 1](images/debug_idx0_patch0.png)      ![Text Patch - Example 2](images/debug_idx4_patch0.png)    (images/debug_idx3_patch0.png)
-
-
-
-![Text Patch - Example 3](images/debug_idx3_patch0.png)
+![TP - Ex1](images/debug_idx0_patch0.png)   ![TPatch - Ex2](images/debug_idx4_patch0.png)   ![TPatch - Ex3](images/debug_idx3_patch0.png)
 
 
 
