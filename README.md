@@ -44,7 +44,10 @@ Before training we:
   Font: vesta -> Label: 10
 
 
-**2.1.1. Preprocessing Strategy**
+&nbsp;
+
+
+**2.1.1 Preprocessing Strategy**
 
 The scanned pages varied in resolution and clarity, therefore, in order to standardize inputs and reduce noise, ee tested and compared multiple preprocessing pipelines. Our final steps included::
 - Grayscale conversion: convert images to grayscale to reduce complexity (from 3 channels to 1), because color isn't needed for font recognition.
