@@ -130,14 +130,12 @@ To visually inspect the quality and correctness of our splitting and transformat
 In order to address the classification of ancient fonts, we explored and compared different neural network architectures: a custom-built Convolutional Neural Network (CNN) and two pretrained models: ResNet18 and MobileNetV2. With these architectures we progressively improved the performance.
 
 Custom CNN – Baseline Architecture:
-We first designed a simple yet effective Convolutional Neural Network to serve as a baseline. This model was trained from scratch and allowed us to test the full data pipeline—including preprocessing and augmentation—under controlled conditions.
+We first designed a simple yet effective Convolutional Neural Network to serve as a baseline.
 
 *Custom CNN (Baseline)*:
 Our starting point was a simple Convolutional Neural Network composed of:
 - 4 convolutional blocks, each with Batch Normalization, ReLU activation, MaxPooling, and Dropout
 - 2 fully connected layers followed by a Softmax classifier for 11 font classes
-
-This model helped validate our pipeline, but performance plateaued below 50% accuracy.
 
 
 &nbsp;
@@ -291,7 +289,10 @@ Custom CNN:
 - Architecture: 4 convolutional blocks (Conv2D → BatchNorm → ReLU → MaxPool) followed by 2 fully connected layers
 - Used to validate the end-to-end training pipeline
 
-It achieved validation accuracy of approximately 45%
+This model served as a foundational benchmark to validate the pipeline, confirming that preprocessing, dataset handling, and architecture integration were functioning correctly. Although it was not our final model, we observed initial learning trends and behaviors that informed improvements in subsequent versions. Based on early testing, the model demonstrated limited learning capacity, and performance metrics remained moderate, consistent with expectations for a shallow architecture. 
+
+
+&nbsp;
 
 EnhancedFontCNN:
 - Built on the Custom CNN but deeper and more regularized
@@ -358,6 +359,18 @@ Shared Setup Across All Experiments:
 ## Section 4: Results
 
 ### Key Findings
+
+EnhancedFontCNN delivered stable yet moderate results with a best accuracy of 43.65%:
+- “Forum” (71% precision, 59% recall) and “Laurel” (42% precision, 79% recall) were among the best-performing classes
+- Underperforming classes included “Vesta” (25% precision, 6% recall) and “Consul” (10% precision, 4% recall)
+- The model improved steadily across epochs, showing consistent learning dynamics
+- Confusion matrix analysis confirmed that visually similar fonts were often confused
+- Misclassifications were frequent between similar-looking fonts (e.g., ceres ↔ juno), while fonts with clearer identity showed diagonal dominance in the confusion matrix
+
+These findings supported our decision to explore transfer learning for better generalization and efficiency.
+
+&nbsp;
+
 - MobileNetV2 outperformed all other models
 - Data augmentation proved crucial for generalization
 - Class-weighted loss improved performance on underrepresented fonts
@@ -368,8 +381,7 @@ The table below provides a high-level summary of the models tested during the ex
 
 | Model Configuration                     | Accuracy  | Notes                                                                                  |
 |----------------------------------------|-----------|----------------------------------------------------------------------------------------|
-| Custom CNN                             | ~50%      | Baseline model with 4 convolutional blocks and 2 dense layers.                        |
-| EnhancedFontCNN                        | ~50%      | Deeper CNN with more layers and dropout; showed no significant improvement.           |
+| EnhancedFontCNN                        | ~43.65%   | Deeper CNN with more layers and dropout; showed no significant improvement.           |
 | ResNet18 (Frozen Backbone)             | —         | Training was aborted early due to excessive runtime; no meaningful results obtained.  |
 | MobileNetV2 (Frozen Backbone)          | ~58%      | Pretrained MobileNetV2 used without fine-tuning; matched baseline performance.        |
 | MobileNetV2 (No Data Augmentation)     | ~71.43%   | Partial fine-tuning without any data augmentation; strong but slightly less robust.   |
