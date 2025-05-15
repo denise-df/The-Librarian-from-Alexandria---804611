@@ -307,7 +307,7 @@ This setup allowed the model to use high-quality pretrained features. While it g
 &nbsp;
 
 
-3. **Experiment 2 – MobileNetV2 (Partial Fine-Tuning)**
+3. **Experiment 3 – MobileNetV2 (Partial Fine-Tuning)**
 Purpose: Test whether a lightweight architecture with selective fine-tuning and strong data augmentation could outperform deeper models.
 
 - MobileNetV2 from `torchvision.models`
