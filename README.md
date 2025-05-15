@@ -53,6 +53,15 @@ The scanned pages varied in resolution and clarity, therefore, in order to stand
 - Text patch extraction: using adaptive thresholding and a sliding window to extract 255x255 patches containing text
 - Fallback center crop: used when no valid patches were found
 
+
+**Text Patches Exmaples**
+![Text Patch - Example 1](images/debug_idx0_patch0.png)
+
+
+
+
+
+
 &nbsp;
 
 
@@ -76,7 +85,8 @@ To prevent overfitting and introduce visual variation, we implemented:
 
 
 **3. Model Selection**
-In order to address the classification of ancient fonts, we explored and compared two different neural network architectures: a custom-built Convolutional Neural Network (CNN) and two pretrained models: ResNet18 and MobileNetV2. With these architectures we progressively improved the performance.
+&nbsp;
+In order to address the classification of ancient fonts, we explored and compared different neural network architectures: a custom-built Convolutional Neural Network (CNN) and two pretrained models: ResNet18 and MobileNetV2. With these architectures we progressively improved the performance.
 
 Custom CNN – Baseline Architecture:
 We first designed a simple yet effective Convolutional Neural Network to serve as a baseline. This model was trained from scratch and allowed us to test the full data pipeline—including preprocessing and augmentation—under controlled conditions.
@@ -94,24 +104,27 @@ This is a deeper version of the baseline CNN and this architecture increased the
 - Using adaptive average pooling to manage input variations
 - Increasing dropout regularization
 
-However, despite the improvements, accuracy still remained moderate.
+The purpose of this model was to ensure correct image preprocessing, patch extraction, label encoding, and training loop functionality. However, performance plateaued early (~50% accuracy).
 
 
 &nbsp;
 To improve the performance, we used pretrained ResNet18 and MobileNetV2 models, both imported from the `torchvision.models` library, which provides pretrained versions of these architectures based on the ImageNet dataset.
 &nbsp;
 ResNet18 (Transfer Learning):
-We fine-tuned a ResNet18 model pretrained on ImageNet:
+It introduced deeper residual blocks and skip connections, which allow for better gradient flow across layers.
 - All feature extraction layers were frozen
 - The final fully connected layer was replaced to output 11 classes
-This approach improved performance and required less training time, but results stabilized around ~58% accuracy.
+This model generalized better than CNNs but was constrained by frozen weights. It reached ~58% accuracy before training was stopped early due to runtime limits.
 
 MobileNetV2 (Final Model):
-- This lightweight and efficient model provided the best performance:
-- Initially trained with a frozen backbone
-- Later runs unfreezed the last few layers for partial fine-tuning
-- Combined with data augmentation and weighted loss
-Results peaked at ~73% accuracy, showing strong generalization and faster convergence, even on limited hardware.
+MobileNetV2 was chosen for its efficiency its lightweight and provided the best performance.
+- Pretrained on ImageNet, it was tested in multiple configurations: 
+  - Frozen backbone with custom head
+  - Partial unfreezing (last 2 convolutional blocks)
+- Lightweight design via depthwise separable convolutions and inverted residuals
+- Final head: GlobalAveragePooling → Dropout(0.4) → Linear → Output
+
+This model achieved the highest validation accuracy (~73.4%) with partial fine-tuning and moderate augmentation. It offered an optimal trade-off between computational cost and performance.
 
 &nbsp;
 This technique, known as *transfer learning*, is particularly effective when dealing with small or medium-sized datasets, like ours. ResNet18 and MobileNetV2 were expected to extract more robust visual features and generalize better than the custom CNN.
